@@ -1,6 +1,6 @@
 {
   "name": "egg-schex",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "schedule custom",
   "eggPlugin": {
     "name": "schex"
@@ -35,9 +35,6 @@
     "pkgfiles": "egg-bin pkgfiles",
     "autod": "autod"
   },
-  "files": [
-    "config"
-  ],
   "ci": {
     "version": "8, 10"
   },
