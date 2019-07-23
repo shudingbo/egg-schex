@@ -1,47 +1,36 @@
-# egg-schedulex
+# egg-schex
 
 [![NPM version][npm-image]][npm-url]
-[![build status][travis-image]][travis-url]
-[![Test coverage][codecov-image]][codecov-url]
-[![David deps][david-image]][david-url]
-[![Known Vulnerabilities][snyk-image]][snyk-url]
-[![npm download][download-image]][download-url]
 
-[npm-image]: https://img.shields.io/npm/v/egg-schedulex.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/egg-schedulex
-[travis-image]: https://img.shields.io/travis/eggjs/egg-schedulex.svg?style=flat-square
-[travis-url]: https://travis-ci.org/eggjs/egg-schedulex
-[codecov-image]: https://img.shields.io/codecov/c/github/eggjs/egg-schedulex.svg?style=flat-square
-[codecov-url]: https://codecov.io/github/eggjs/egg-schedulex?branch=master
-[david-image]: https://img.shields.io/david/eggjs/egg-schedulex.svg?style=flat-square
-[david-url]: https://david-dm.org/eggjs/egg-schedulex
-[snyk-image]: https://snyk.io/test/npm/egg-schedulex/badge.svg?style=flat-square
-[snyk-url]: https://snyk.io/test/npm/egg-schedulex
-[download-image]: https://img.shields.io/npm/dm/egg-schedulex.svg?style=flat-square
-[download-url]: https://npmjs.org/package/egg-schedulex
 
-<!--
-Description here.
--->
+[npm-image]: https://img.shields.io/npm/v/egg-schex.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/egg-schex
+[sdb-schedule]: https://github.com/shudingbo/sdb-schedule#API
+
+本插件用于为eggjs提供更加灵活的计划任务功能，功能封装自 [sdb-schedule][sdb-schedule]。
+* 可以在脚本里控制计划任务的运行，停止；
+* 支持子任务
+
+** 详细参考 [sdb-schedule][sdb-schedule]**
 
 ## 依赖说明
 
 ### 依赖的 egg 版本
 
-egg-schedulex 版本 | egg 1.x
+egg-schex 版本 | egg 1.x
 --- | ---
 1.x | 😁
 0.x | ❌
 
 ### 依赖的插件
-<!--
 
-如果有依赖其它插件，请在这里特别说明。如
+- ioredis
 
-- security
-- multipart
+## 安装
 
--->
+```bash
+$ npm i egg-schex --save
+```
 
 ## 开启插件
 
@@ -49,10 +38,36 @@ egg-schedulex 版本 | egg 1.x
 // config/plugin.js
 exports.scheduleX = {
   enable: true,
-  package: 'egg-schedulex',
+  package: 'egg-schex',
 };
 ```
+## 配置
 
+```js
+// {app_root}/config/config.default.js
+// 如果没有 redis 实例
+exports.schex = {
+    client: {
+      port: 6379,
+      host: '192.168.2.10',
+      password: null,
+      keyPre: 'sdb:schedule',      // redis key preName
+      checkInterval: 5000,
+    }
+};
+
+// 如果APP已有 redis实例
+exports.schex = {
+    client: {
+      keyPre: 'sdb:schedule',
+      checkInterval: 5000,
+      redisInstanseName: 'redis',   // redis实例名称 app.[redis]
+    }
+};
+
+```
+
+see [config/config.default.js](config/config.default.js) for more detail.
 ## 使用场景
 
 - Why and What: 描述为什么会有这个插件，它主要在完成一件什么事情。

@@ -1,4 +1,4 @@
-# egg-schedulex
+# egg-schex
 
 [![NPM version][npm-image]][npm-url]
 
@@ -6,6 +6,13 @@
 [npm-image]: https://img.shields.io/npm/v/egg-schex.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/egg-schex
 [sdb-schedule]: https://github.com/shudingbo/sdb-schedule#API
+
+
+This plug-in is used for eggjs to provide more flexible planning task function, function package from [sdb-schedule][sdb-schedule].
+* Can control the running and stopping of scheduled tasks in the script
+* Support subtasks
+
+** A detailed reference [sdb-schedule][sdb-schedule]**
 
 ## Install
 
