@@ -2,7 +2,7 @@
 const mssql = require('mssql');
 
 module.exports = function(sc, job, runStep) {
-  if (runStep === 1) {
+  if (runStep === sc.jobStep.RUN) {
     startTa(sc, job);
   }
 };

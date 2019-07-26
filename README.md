@@ -24,7 +24,7 @@ $ npm i egg-schex --save
 
 ```js
 // {app_root}/config/plugin.js
-exports.scheduleX = {
+exports.schex = {
   enable: true,
   package: 'egg-schex',
 };
@@ -34,7 +34,6 @@ exports.scheduleX = {
 
 ```js
 // {app_root}/config/config.default.js
-// if not have redis instanse
 exports.schex = {
     client: {
       port: 6379,
@@ -42,15 +41,6 @@ exports.schex = {
       password: null,
       keyPre: 'sdb:schedule',      // redis key preName
       checkInterval: 5000,
-    }
-};
-
-// if has redis instance
-exports.schex = {
-    client: {
-      keyPre: 'sdb:schedule',
-      checkInterval: 5000,
-      redisInstanseName: 'redis',   // The redis instance Name app.[redis]
     }
 };
 

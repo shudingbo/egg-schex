@@ -36,7 +36,7 @@ $ npm i egg-schex --save
 
 ```js
 // config/plugin.js
-exports.scheduleX = {
+exports.schex = {
   enable: true,
   package: 'egg-schex',
 };
@@ -45,7 +45,6 @@ exports.scheduleX = {
 
 ```js
 // {app_root}/config/config.default.js
-// 如果没有 redis 实例
 exports.schex = {
     client: {
       port: 6379,
@@ -53,15 +52,6 @@ exports.schex = {
       password: null,
       keyPre: 'sdb:schedule',      // redis key preName
       checkInterval: 5000,
-    }
-};
-
-// 如果APP已有 redis实例
-exports.schex = {
-    client: {
-      keyPre: 'sdb:schedule',
-      checkInterval: 5000,
-      redisInstanseName: 'redis',   // redis实例名称 app.[redis]
     }
 };
 

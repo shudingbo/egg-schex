@@ -1,3 +1,7 @@
+/*eslint linebreak-style: ["error", "windows"]*/
 {
-  "extends": "eslint-config-egg"
+  "extends": "eslint-config-egg",
+  "rules":{
+    "linebreak-style": 0
+  }
 }
