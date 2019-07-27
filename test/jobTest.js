@@ -1,28 +1,69 @@
 'use strict';
-const mssql = require('mssql');
 
-module.exports = function(sc, job, runStep) {
-  if (runStep === sc.jobStep.RUN) {
-    startTa(sc, job);
-  }
+const SchexJob = require('egg-schex').SchexJob;
+
+const init_ctx = {
+  test: 0,
 };
 
+// simple module //////////
+// module.exports = function (eggctx, sc, job, runStep) {
+//   switch (runStep) {
+//   case sc.jobStep.INIT:
+//     job.ctx = Object.assign({}, init_ctx);
+//     return init_ctx;
+//   case sc.jobStep.RUN:
+//     return startTa(eggctx, sc, job);
+//   case sc.jobStep.STOP:
+//     job.ctx = init_ctx;
+//     break;
+//   default:
+//     break;
+//   }
+// };
 
-function startTa(sc, job) {
-  const { app } = sc;
 
-  (async () => {
-    try {
-      const sTime = Date.now();
-      const qu = new mssql.Request(app.mssql);
-      await qu.execute('TaxReport');
-      await qu.execute('DateReport');
+// function startTa (ctx, sc, job) {
+//   // const { app } = sc;
+//   (async () => {
 
-      const dTime = Date.now() - sTime;
-      sc.updateMsg(job.name, 'success:DateReport Success!' + dTime);
-    } catch (err) {
-      sc.updateMsg(job.name, err.toString());
-    }
-  })();
+//     job.ctx.test += 2;
+//     console.log('----------', job.name, Date.now(), job.ctx.test);
+//     job.msg = `${job.ctx.test} `;
+//     console.log(ctx.helper.dateFormat());
+//   })();
+// }
+
+// mode class /////////////////////////////////////
+
+class UpdateCache extends SchexJob {
+  // subscribe 是真正定时任务执行时被运行的函数
+
+  onActInit() {
+    console.log('onActInit1');
+    this._job.ctx = Object.assign({}, init_ctx);
+  }
+
+  onActRun() {
+    console.log('onActRun1');
+    const { ctx } = this._job;
+    const { eggctx: ectx } = this;
+
+    ctx.test += 1;
+    console.log('----------', this._job.name, Date.now(), ctx.test);
+    console.log(ectx.helper.dateFormat());
+    this._job.msg = `${ctx.test} `;
+
+  }
+
+  onActStop() {
+    console.log('onActStop1');
+    this._job.ctx = init_ctx;
+  }
+
+  onActPause() {
+    console.log('onActPause1');
+  }
 }
 
+module.exports = UpdateCache;

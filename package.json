@@ -1,44 +1,26 @@
 {
-  "_from": "egg-schex@0.0.2",
-  "_id": "egg-schex@0.0.2",
-  "_inBundle": false,
-  "_integrity": "sha512-cjKBQfVqv4J0b/UsplNb28i/jFDDs1OpNPVY26uxEkb+tfb0nBnosMRE29MVXUsOgIj0YicVuvzAqA7JlhFONg==",
-  "_location": "/egg-schex",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "version",
-    "registry": true,
-    "raw": "egg-schex@0.0.2",
-    "name": "egg-schex",
-    "escapedName": "egg-schex",
-    "rawSpec": "0.0.2",
-    "saveSpec": null,
-    "fetchSpec": "0.0.2"
+  "name": "egg-schex",
+  "version": "0.0.3",
+  "description": "super schedule, custom schedule",
+  "eggPlugin": {
+    "name": "schex"
   },
-  "_requiredBy": [
-    "/"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shudingbo/egg-schex.git"
+  },
+  "keywords": [
+    "egg",
+    "eggPlugin",
+    "egg-plugin"
   ],
-  "_resolved": "https://registry.npmjs.org/egg-schex/-/egg-schex-0.0.2.tgz",
-  "_shasum": "e7300b197e1587f4b1368eea72cb51ef191c900b",
-  "_spec": "egg-schex@0.0.2",
-  "_where": "/mnt/e/workspace/website/countegg/egg",
-  "author": {
-    "name": "shudingbo"
-  },
-  "bugs": {
-    "url": "https://github.com/shudingbo/egg-schex/issues"
-  },
-  "bundleDependencies": false,
-  "ci": {
-    "version": "8, 10"
-  },
   "dependencies": {
     "cron-parser": "^2.7.3",
     "ioredis": "^4.9.0",
     "node-schedule": "^1.3.2"
   },
   "deprecated": false,
-  "description": "schedule custom",
+  
   "devDependencies": {
     "autod": "^3.0.1",
     "autod-egg": "^1.1.0",
@@ -49,23 +31,15 @@
     "eslint": "^5.13.0",
     "eslint-config-egg": "^7.1.0"
   },
-  "eggPlugin": {
-    "name": "schex"
-  },
   "engines": {
     "node": ">=8.0.0"
   },
   "homepage": "https://github.com/shudingbo/egg-schex",
-  "keywords": [
-    "egg",
-    "eggPlugin",
-    "egg-plugin"
-  ],
-  "license": "MIT",
-  "name": "egg-schex",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/shudingbo/egg-schex.git"
+  "bugs": {
+    "url": "https://github.com/shudingbo/egg-schex/issues"
+  },
+  "ci": {
+    "version": "8, 10"
   },
   "scripts": {
     "autod": "autod",
@@ -76,5 +50,9 @@
     "test": "npm run lint -- --fix && egg-bin pkgfiles && npm run test-local",
     "test-local": "egg-bin test"
   },
-  "version": "0.0.2"
+  
+  "author": {
+    "name": "shudingbo"
+  },
+  "license": "MIT"
 }
