@@ -1,4 +1,4 @@
-'use strict';
+
 
 const SchexJob = require('egg-schex').SchexJob;
 
@@ -21,7 +21,7 @@ class UpdateCache extends SchexJob {
     this._job.ctx = Object.assign({}, init_ctx);
   }
 
-  onActRun() {
+  async onActRun() {
     const { ctx } = this._job;
     const { eggctx: ectx } = this;
 
@@ -41,15 +41,15 @@ class UpdateCache extends SchexJob {
     }
   }
 
-  onActStop() {
+  async onActStop() {
     this._job.ctx = init_ctx;
   }
 
-  onActPause() {
+  async onActPause() {
     console.log('onActPause1');
   }
 
-  onActSubRun(job) {
+  async onActSubRun(job) {
     // console.log('onActSubRun-1:', job.name);
 
     this._job.ctx.subJob.cnt++;
@@ -57,7 +57,7 @@ class UpdateCache extends SchexJob {
     job.msg = `${this._job.ctx.subJob.cnt}`;
   }
 
-  onActSubStop(job) {
+  async onActSubStop(job) {
     // console.log('onActSubStop-1:', job.name);
     this._job.ctx.subJob.cnt = 0;
   }
