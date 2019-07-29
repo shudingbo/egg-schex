@@ -4,65 +4,62 @@ const SchexJob = require('egg-schex').SchexJob;
 
 const init_ctx = {
   test: 0,
+  subJob: {
+    cnt: 0,
+  },
 };
-
-// simple module //////////
-// module.exports = function (eggctx, sc, job, runStep) {
-//   switch (runStep) {
-//   case sc.jobStep.INIT:
-//     job.ctx = Object.assign({}, init_ctx);
-//     return init_ctx;
-//   case sc.jobStep.RUN:
-//     return startTa(eggctx, sc, job);
-//   case sc.jobStep.STOP:
-//     job.ctx = init_ctx;
-//     break;
-//   default:
-//     break;
-//   }
-// };
-
-
-// function startTa (ctx, sc, job) {
-//   // const { app } = sc;
-//   (async () => {
-
-//     job.ctx.test += 2;
-//     console.log('----------', job.name, Date.now(), job.ctx.test);
-//     job.msg = `${job.ctx.test} `;
-//     console.log(ctx.helper.dateFormat());
-//   })();
-// }
-
-// mode class /////////////////////////////////////
-
+const subJobName = 'sub_t';
 class UpdateCache extends SchexJob {
-  // subscribe 是真正定时任务执行时被运行的函数
+
+  constructor(ctx, sc, job) {
+    super(ctx, sc, job);
+
+    this.cnt = 1;
+  }
 
   onActInit() {
-    console.log('onActInit1');
     this._job.ctx = Object.assign({}, init_ctx);
   }
 
   onActRun() {
-    console.log('onActRun1');
     const { ctx } = this._job;
     const { eggctx: ectx } = this;
 
     ctx.test += 1;
     console.log('----------', this._job.name, Date.now(), ctx.test);
     console.log(ectx.helper.dateFormat());
+    // console.log(this.ctx, this.app);
     this._job.msg = `${ctx.test} `;
 
+    if (ctx.test === 2 || ctx.test === 17) {
+      this.addSubJob(subJobName, {
+        cron: '*/2 * * * * *',
+        switch: 1,
+      });
+    } else if (ctx.test === 15 || ctx.test === 19) {
+      this.stopJob(subJobName, `Stop ${subJobName}`);
+    }
   }
 
   onActStop() {
-    console.log('onActStop1');
     this._job.ctx = init_ctx;
   }
 
   onActPause() {
     console.log('onActPause1');
+  }
+
+  onActSubRun(job) {
+    // console.log('onActSubRun-1:', job.name);
+
+    this._job.ctx.subJob.cnt++;
+    console.log('--- ctx=', this._job.ctx);
+    job.msg = `${this._job.ctx.subJob.cnt}`;
+  }
+
+  onActSubStop(job) {
+    // console.log('onActSubStop-1:', job.name);
+    this._job.ctx.subJob.cnt = 0;
   }
 }
 
