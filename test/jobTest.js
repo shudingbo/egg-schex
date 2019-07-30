@@ -8,13 +8,13 @@ const init_ctx = {
     cnt: 0, // 子任务属性
   },
 };
-const subJobName = 'sub_t'; // 子任务名称
-
 
 class UpdateCache extends SchexJob {
 
   constructor(ctx, sc, job) {
     super(ctx, sc, job);
+
+    this.subJobName = job.name + '-sub_t'; // 子任务名称
     this.cnt = 1;
   }
 
@@ -35,12 +35,12 @@ class UpdateCache extends SchexJob {
     this._job.msg = `${ctx.test} `;
 
     if (ctx.test === 2 || ctx.test === 17) { // 启动子任务
-      this.addSubJob(subJobName, {
+      this.addSubJob(this.subJobName, {
         cron: '*/2 * * * * *',
         switch: 1,
       });
     } else if (ctx.test === 15 || ctx.test === 19) { // 关闭子任务
-      this.stopJob(subJobName, `Stop ${subJobName}`);
+      this.stopJob(this.subJobName, `Stop ${this.subJobName}`);
     }
   }
 
