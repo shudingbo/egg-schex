@@ -1,6 +1,6 @@
 {
   "name": "egg-schex",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "super schedule, custom schedule",
   "eggPlugin": {
     "name": "schex"
