@@ -26,7 +26,7 @@ class UpdateCache extends SchexJob {
   /** 任务处理函数 */
   async onActRun() {
     const { ctx } = this._job; // 获取任务的 ctx
-    const { eggctx: ectx, app } = this; // 获取 egg 的 ctx 和 app
+    const { ctx: ectx, app } = this; // 获取 egg 的 ctx 和 app
 
     ctx.test += 1;
     console.log('----------', this._job.name, Date.now(), ctx.test);

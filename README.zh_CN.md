@@ -6,6 +6,7 @@
 [npm-image]: https://img.shields.io/npm/v/egg-schex.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/egg-schex
 [sdb-schedule]: https://github.com/shudingbo/sdb-schedule#API
+[sample]: https://github.com/shudingbo/egg-schex-sample.git
 
 本插件用于为eggjs提供更加灵活的计划任务功能，功能封装自 [sdb-schedule][sdb-schedule]。
 * 可以在脚本里控制计划任务的运行，停止；
@@ -77,7 +78,9 @@ see [config/config.default.js](config/config.default.js) for more detail.
 上下文 （ctx） 存储了任务运行时数据，用于确保每个worker进程运行时，状态一致。 子任务和父任务共用同一个上下文。
 
 
-### 例子 ./test/jobTest.js
+### 例子 [示例][sample]
+https://github.com/shudingbo/egg-schex-sample.git
+
 目录结构
 ```
   - app
@@ -115,7 +118,7 @@ class UpdateCache extends SchexJob {
   /** 任务处理函数 */
   async onActRun() {
     const { ctx } = this._job; // 获取任务的 ctx
-    const { eggctx: ectx, app } = this; // 获取 egg 的 ctx 和 app
+    const { ctx: ectx, app } = this; // 获取 egg 的 ctx 和 app
 
     ctx.test += 1;
     console.log('----------', this._job.name, Date.now(), ctx.test);
