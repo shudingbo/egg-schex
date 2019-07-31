@@ -68,8 +68,66 @@ exports.schex = {
 ## APP(UI)
 Now we implement an app [sdb-schedule-ui],using admin schedules( only support redis drv ),you can [download] it.
 - Base Electron
+- Sample https://github.com/shudingbo/egg-schex-sample.git
 
-see [config/config.default.js](config/config.default.js) for more detail.
+### 任务数据存储
+可以通过 UI 对任务进行配置
+任务数据存储在redis里，包含下列4个键，均为 hash。
+- **< keyPre >**:jobs 存放任务的基本信息，包含 cron执行计划，执行名称，执行脚本
+- **< keyPre >**:cfg  存放任务的附带配置信息
+- **< keyPre >**:updateTime 存放任务基本信息和附带信息的最后修改时间，schex 根据此时间戳判断任务是否变化，任务配置变化后会停止并重启任务
+- **< keyPre >**:status 任务的执行状态
+
+
+#### **< keyPre >**:jobs
+key,任务名字；value，任务基本信息
+``` javascript
+{
+  "cron": "*/60 * * * * *",
+  "fun": "./sc/autoadjust.js",
+  "switch": false
+}
+```
+* cron, cron 字符串
+* fun,  任务执行脚本
+* switch, 任务开关
+
+#### **< keyPre >**:cfg
+- key,任务名字；
+- value，josn 格式任务配置，配置会在任务初始化时，传给job，
+``` javascript
+{
+}
+```
+
+#### **< keyPre >**:updateTime
+- key,任务名字；
+- value，Unix 时间戳
+
+#### **< keyPre >**:status
+任务运行后会自动更新。
+- key,任务名字；
+- value，josn 格式,任务执行状态
+``` javascript
+{
+  "status": true,
+  "latestHandleType": 1,
+  "latestHandleTime": 1564557950,
+  "startTime": 1564557927,
+  "stopTime": 0,
+  "latestRunTime": 1564557950,
+  "nextRunTime": null,
+  "msg": "3 "
+}
+```
+* status, 任务是否运行
+* startTime, Unix 时间戳，任务启动时间
+* stopTime,  Unix 时间戳，任务停止时间
+* latestRunTime, Unix 时间戳，最近任务执行时间
+* nextRunTime,  Unix 时间戳，下次任务执行时间
+* msg, 任务消息
+
+
 ## 使用场景
 本插件实现了灵活的定时任务管理，可以在插件里控制定时任务的开关。
 - 子计划任务功能， 可以代码创建 子计划；
@@ -178,63 +236,6 @@ module.exports = UpdateCache;
 ## 详细配置
 
 请到 [config/config.default.js](config/config.default.js) 查看详细配置项说明。
-
-### 任务数据存储
-可以通过 UI 对任务进行配置
-任务数据存储在redis里，包含下列4个键，均为 hash。
-- **< keyPre >**:jobs 存放任务的基本信息，包含 cron执行计划，执行名称，执行脚本
-- **< keyPre >**:cfg  存放任务的附带配置信息
-- **< keyPre >**:updateTime 存放任务基本信息和附带信息的最后修改时间，schex 根据此时间戳判断任务是否变化，任务配置变化后会停止并重启任务
-- **< keyPre >**:status 任务的执行状态
-
-
-#### **< keyPre >**:jobs
-key,任务名字；value，任务基本信息
-``` javascript
-{
-  "cron": "*/60 * * * * *",
-  "fun": "./sc/autoadjust.js",
-  "switch": false
-}
-```
-* cron, cron 字符串
-* fun,  任务执行脚本
-* switch, 任务开关
-
-#### **< keyPre >**:cfg
-- key,任务名字；
-- value，josn 格式任务配置，配置会在任务初始化时，传给job，
-``` javascript
-{
-}
-```
-
-#### **< keyPre >**:updateTime
-- key,任务名字；
-- value，Unix 时间戳
-
-#### **< keyPre >**:status
-任务运行后会自动更新。
-- key,任务名字；
-- value，josn 格式,任务执行状态
-``` javascript
-{
-  "status": true,
-  "latestHandleType": 1,
-  "latestHandleTime": 1564557950,
-  "startTime": 1564557927,
-  "stopTime": 0,
-  "latestRunTime": 1564557950,
-  "nextRunTime": null,
-  "msg": "3 "
-}
-```
-* status, 任务是否运行
-* startTime, Unix 时间戳，任务启动时间
-* stopTime,  Unix 时间戳，任务停止时间
-* latestRunTime, Unix 时间戳，最近任务执行时间
-* nextRunTime,  Unix 时间戳，下次任务执行时间
-* msg, 任务消息
 
 
 ## 单元测试
