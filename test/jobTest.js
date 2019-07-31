@@ -1,6 +1,6 @@
 'use strict';
 
-const SchexJob = require('egg-schex').SchexJob;
+const SchexJob = require('../index').SchexJob;
 
 const init_ctx = {
   test: 0, // 任务属性
@@ -9,13 +9,12 @@ const init_ctx = {
   },
 };
 
-class UpdateCache extends SchexJob {
+class SchexJobSample extends SchexJob {
 
   constructor(ctx, sc, job) {
     super(ctx, sc, job);
 
     this.subJobName = job.name + '-sub_t'; // 子任务名称
-    this.cnt = 1;
   }
 
   // 任务初始化函数，在这里设置初始化数据
@@ -68,4 +67,4 @@ class UpdateCache extends SchexJob {
   }
 }
 
-module.exports = UpdateCache;
+module.exports = SchexJobSample;
