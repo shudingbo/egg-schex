@@ -17,18 +17,15 @@
 本插件用于为eggjs提供更加灵活的计划任务功能，使用 redis 存储相关数据（数据存放在 **keyPre** 定义的redis键里）。
 * 可以在脚本里控制计划任务的运行，停止；
 * 支持子任务创建，停止
-* 
+* 通过UI创建，管理任务 **详细参考 [sdb-schedule][sdb-schedule]**
 
-** 详细参考 [sdb-schedule][sdb-schedule]**
 
 ## 依赖说明
-
 ### 依赖的 egg 版本
 
 egg-schex 版本 | egg 1.x
 --- | ---
 1.x | 😁
-0.x | ❌
 
 ### 依赖的插件
 
@@ -57,12 +54,26 @@ exports.schex = {
     client: {
       port: 6379,
       host: '192.168.2.10',
-      password: null,
+      db: 0,
       keyPre: 'sdb:schedule',      // redis key preName
       checkInterval: 5000,
+      jobInitCfg: 'schex.json',    // 可选，初始化任务配置，在每次启动时将任务设置到 redis
     }
 };
 
+// {app_root}/config/schex.json
+{
+	"testSC":{
+		"base":{
+			"cron":"*/5 * * * * *",
+			"fun":"./sc/testSC.js",
+			"switch":true				
+		},
+		"cfg":{
+			"rUrl":"http://test.com"
+		}
+	}
+}
 ```
 
 ## APP(UI)
@@ -157,11 +168,12 @@ https://github.com/shudingbo/egg-schex-sample.git
   - sc
     - jobTest.js    ()
 ```
-./test/jobTest.js
+
 ``` js
+// ./test/jobTest.js
 'use strict';
 
-const SchexJob = require('egg-schex').SchexJob;
+const SchexJob = require('../index').SchexJob;
 
 const init_ctx = {
   test: 0, // 任务属性
@@ -169,14 +181,12 @@ const init_ctx = {
     cnt: 0, // 子任务属性
   },
 };
-const subJobName = 'sub_t'; // 子任务名称
 
-
-class UpdateCache extends SchexJob {
+class SchexJobSample extends SchexJob {
 
   constructor(ctx, sc, job) {
     super(ctx, sc, job);
-    this.cnt = 1;
+    this.subJobName = job.name + '-sub_t'; // 子任务名称
   }
 
   // 任务初始化函数，在这里设置初始化数据
@@ -186,9 +196,10 @@ class UpdateCache extends SchexJob {
 
   /** 任务处理函数 */
   async onActRun() {
-    const { ctx } = this._job; // 获取任务的 ctx
+    const { ctx, cfg } = this._job; // 获取任务的 ctx
     const { ctx: ectx, app } = this; // 获取 egg 的 ctx 和 app
-
+    this.logger.info('test');
+    console.log(cfg);
     ctx.test += 1;
     console.log('----------', this._job.name, Date.now(), ctx.test);
     console.log(ectx.helper.dateFormat());
@@ -196,12 +207,12 @@ class UpdateCache extends SchexJob {
     this._job.msg = `${ctx.test} `;
 
     if (ctx.test === 2 || ctx.test === 17) { // 启动子任务
-      this.addSubJob(subJobName, {
+      this.addSubJob(this.subJobName, {
         cron: '*/2 * * * * *',
         switch: 1,
       });
     } else if (ctx.test === 15 || ctx.test === 19) { // 关闭子任务
-      this.stopJob(subJobName, `Stop ${subJobName}`);
+      this.stopJob(this.subJobName, `Stop ${this.subJobName}`);
     }
   }
 
@@ -229,7 +240,7 @@ class UpdateCache extends SchexJob {
   }
 }
 
-module.exports = UpdateCache;
+module.exports = SchexJobSample;
 
 
 ```
@@ -237,14 +248,35 @@ module.exports = UpdateCache;
 
 请到 [config/config.default.js](config/config.default.js) 查看详细配置项说明。
 
+## 更改记录
+### 0.0.7
+  1. 增加初始化任务配置，通过 配置 {app_root}/config/config.default.js 的 jobInitCfg字段
+  ```
+  // {app_root}/config/config.default.js
+    exports.schex = {
+        client: {
+          port: 6379,
+          host: '192.168.2.10',
+          db: 0,
+          keyPre: 'sdb:schedule',      // redis key preName
+          checkInterval: 5000,
+          jobInitCfg: 'schex.json',    // 新增 可选，初始化任务配置，在每次启动时将任务设置到 redis
+        }
+    };
+  ```
 
-## 单元测试
+### 0.0.6
+ 1. 增加 job 编写时的代码自动提示； 
 
-<!-- 描述如何在单元测试中使用此插件，例如 schedule 如何触发。无则省略。-->
+### 0.0.5
+ 1. 实现子任务功能
+
+### 0.0.4
+ 1. 实现基本任务功能
 
 ## 提问交流
 
-请到 [egg issues](https://github.com/eggjs/egg/issues) 异步交流。
+请到 [egg-schex issues](https://github.com/shudingbo/egg-schex/issues) 异步交流。
 
 ## License
 
