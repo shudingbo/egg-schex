@@ -47,7 +47,7 @@ type CtlMethod = {
   ctlUpdateJob: 6, // 更新JOB或配置(包括开关)
 }
 
-type CtlRet = {
+export type CtlRet = {
   /** Job name */
   status: Boolean
 
@@ -55,15 +55,21 @@ type CtlRet = {
   msg : String
 };
 
+export type CtlMsg = {
+  /** Job name */
+  status: Boolean
 
+  /** Message */
+  msg : String
+};
 
-declare function cbCtlMsgRet(cb?:(res:Object)=>void): void
+declare function cbCtlMsgRet(cb:(res:Object)=>void): void
 
 export class SchexManagerApp {
   /** Egg Application */
   app: Application
   logger: EggLogger
-  sendCtlMsg( info:CtlMsg,  cb:cbCtlMsgRet ): ctlRet
+  sendCtlMsg( info:CtlMsg,  cb:(res:Object)=>void ): CtlRet
 }
 
 export class SchexJob {
