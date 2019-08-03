@@ -34,18 +34,29 @@ type Job = {
   ctx : Object;
 }
 
+export interface RedisDrv {
+  /** Egg Application */
+  agent: Agent
+  logger: EggLogger
+  getJobs() : Object
+  startJob( jobName:String,  jobBase:Object, msg:String ): void
+  stopJob( jobCfg:Object ): void
+  addJob( jobCfg:Object ): void
+}
+
 export class SchexManagerAgent {
   /** Egg Application */
   agent: Agent
   logger: EggLogger
+  drv: RedisDrv
 }
 
-type CtlMethod = {
-  ctlSta: Number, // 获取所有job状态
-  ctlAddJob: 4, // 添加Job
-  ctlDelJob: 5, // 删除Job
-  ctlUpdateJob: 6, // 更新JOB或配置(包括开关)
-}
+// type CtlMethod = {
+//   ctlSta: Number, // 获取所有job状态
+//   ctlAddJob: 4, // 添加Job
+//   ctlDelJob: 5, // 删除Job
+//   ctlUpdateJob: 6, // 更新JOB或配置(包括开关)
+// }
 
 export type CtlRet = {
   /** Job name */
@@ -56,11 +67,11 @@ export type CtlRet = {
 };
 
 export type CtlMsg = {
-  /** Job name */
-  status: Boolean
+  /** method name */
+  method: Number
 
-  /** Message */
-  msg : String
+  /** Job name */
+  jobName : String
 };
 
 declare function cbCtlMsgRet(cb:(res:Object)=>void): void
@@ -69,7 +80,11 @@ export class SchexManagerApp {
   /** Egg Application */
   app: Application
   logger: EggLogger
+  /** 发送控制消息 */
   sendCtlMsg( info:CtlMsg,  cb:(res:Object)=>void ): CtlRet
+  
+  /** 是否有正在处理的控制消息 */
+  isHandleCtlMsg() : Boolean
 }
 
 export class SchexJob {
