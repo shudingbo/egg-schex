@@ -248,7 +248,104 @@ module.exports = SchexJobSample;
 
 请到 [config/config.default.js](config/config.default.js) 查看详细配置项说明。
 
+
+## API
+### Schex plugin API
+  egg Service / controller 可以通过接口函数创建，管理job。 通过 this.app.schex.<函数名> 调用。
+
+#### getJobStatus  获取所有任务的执行状态
+```
+getJobStatus(); 
+```
+
+#### addJob  增加任务
+```
+addJob( 'testAddJob',
+    {
+      cron: '*/5 * * * * *',
+      fun: './sc/testAddJob.js',
+      switch: false,
+    },
+    {
+      path: 'this is path from cfg',
+    }
+  );
+```
+
+#### updateJob 更新任务配置
+```
+updateJob('testAddJob',
+  {
+    cron: '*/5 * * * * *',
+    fun: './sc/testAddJob.js',
+    switch: true,
+  },
+  {
+    path: 'this is path from cfg 12',
+  }
+);
+
+```
+
+#### deleteJob 删除指定名称的任务
+```
+this.app.schex.('jobName');
+```
+#### startJob  启动指定名称的任务
+```
+updateJob('jobName');
+```
+
+#### stopJob 停止指定名称的任务
+```
+this.app.schex.('jobName');
+```
+
+### Job API
+  任务 API 参见，例子 https://github.com/shudingbo/egg-schex-sample.git
+
+
 ## 更改记录
+
+### 0.0.9
+ 1. 增加一系列接口函数， 其它 egg Service / controller 可以通过接口函数创建，管理job
+ ```
+   this.app.schex.getJobStatus();   // 获取所有任务的执行状态   
+   this.app.schex.addJob(           // 增加任务
+          'testAddJob',
+          {
+            cron: '*/5 * * * * *',
+            fun: './sc/testAddJob.js',
+            switch: false,
+          },
+          {
+            path: 'this is path from cfg',
+          }
+        );
+   
+   /// 更新任务配置
+   this.app.schex.updateJob(
+          'testAddJob',
+          {
+            cron: '*/5 * * * * *',
+            fun: './sc/testAddJob.js',
+            switch: true,
+          },
+          {
+            path: 'this is path from cfg 12',
+          }
+        );
+
+   /// 删除指定名称的任务
+   this.app.schex.stopJob('jobName');
+  
+   /// 启动指定名称的任务
+   this.app.schex.startJob('jobName');
+
+   /// 停止指定名称的任务
+   this.app.schex.stopJob('jobName');
+ ```
+
 ### 0.0.7
   1. 增加初始化任务配置，通过 配置 {app_root}/config/config.default.js 的 jobInitCfg字段
   ```

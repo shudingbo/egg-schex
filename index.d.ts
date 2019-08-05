@@ -12,6 +12,17 @@ type JobStep = {
 
 }
 
+type JobBase = {
+  /** Cron String */
+  cron : String 
+
+  /** job's script */
+  fun  : String
+
+  /** Job's switch */
+  switch: Boolean
+}
+
 
 type Job = {
 
@@ -51,13 +62,6 @@ export class SchexManagerAgent {
   drv: RedisDrv
 }
 
-// type CtlMethod = {
-//   ctlSta: Number, // 获取所有job状态
-//   ctlAddJob: 4, // 添加Job
-//   ctlDelJob: 5, // 删除Job
-//   ctlUpdateJob: 6, // 更新JOB或配置(包括开关)
-// }
-
 export type CtlRet = {
   /** Job name */
   status: Boolean
@@ -74,17 +78,33 @@ export type CtlMsg = {
   jobName : String
 };
 
-declare function cbCtlMsgRet(cb:(res:Object)=>void): void
-
 export class SchexManagerApp {
   /** Egg Application */
   app: Application
   logger: EggLogger
-  /** 发送控制消息 */
-  sendCtlMsg( info:CtlMsg,  cb:(res:Object)=>void ): CtlRet
-  
+
+
   /** 是否有正在处理的控制消息 */
   isHandleCtlMsg() : Boolean
+
+  /** start Job */
+  startJob( jobName:String): Object
+
+  /** stop Job */
+  stopJob( jobName:String): Object
+
+  /** delete Job */
+  deleteJob( jobName:String): Object
+
+  /** get all Job status */
+  getJobStatus( ): Object
+
+
+  /** add Job */
+  addJob( jobName:String, base:JobBase, cfg:Object ): Object
+
+  /** Update Job Info*/
+  updateJob( jobName:String, base:JobBase, cfg:Object ): Object
 }
 
 export class SchexJob {
@@ -102,3 +122,41 @@ export class SchexJob {
   logger: EggLogger
 }
 
+
+interface EggSchexOption {
+  /** redis server host */
+  host: String;
+
+  /** redis server port */
+  port: Number;
+
+  /** redis server password */
+  password: String;
+
+  /** redis server db index */
+  db: Number;
+
+  /** redis schex key pre */
+  keyPre: String;
+
+  /** schex check job status interval( ms ) */
+  checkInterval: Number;
+
+  /** schex init job config path */
+  jobInitCfg: String;
+}
+
+interface EggSchexOptions {
+  client: EggSchexOption;
+}
+
+
+declare module 'egg' {
+  interface Application {
+    schex: SchexManagerApp;
+  }
+
+  interface EggAppConfig {
+    schex: EggSchexOptions;
+  }
+}
