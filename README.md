@@ -307,6 +307,10 @@ this.app.schex.('jobName');
 
 ## 更改记录
 
+### 0.1.0
+ 1. Fix Delete Job, schex Agent not delete(only redis delete)
+
+
 ### 0.0.9
  1. 增加一系列接口函数， 其它 egg Service / controller 可以通过接口函数创建，管理job
  ```
