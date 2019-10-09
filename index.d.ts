@@ -107,6 +107,14 @@ export class SchexManagerApp {
   updateJob( jobName:String, base:JobBase, cfg:Object ): Object
 }
 
+export type SubJobOpt = {
+  /** Job cron */
+  cron: string
+
+  /** switch */
+  switch : Boolean
+};
+
 export class SchexJob {
   /** egg ctx instance */
   ctx:  Context
@@ -120,6 +128,12 @@ export class SchexJob {
 
   /** egg logger instance */
   logger: EggLogger
+
+  /** addSubJob */
+  addSubJob( name:String, opt:SubJobOpt ): void
+
+  /** stopSubJob */
+  stopSubJob( name:String, msg:String ): void
 }
 
 

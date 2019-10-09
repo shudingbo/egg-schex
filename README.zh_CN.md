@@ -212,7 +212,7 @@ class SchexJobSample extends SchexJob {
         switch: 1,
       });
     } else if (ctx.test === 15 || ctx.test === 19) { // 关闭子任务
-      this.stopJob(this.subJobName, `Stop ${this.subJobName}`);
+      this.stopSubJob(this.subJobName, `Stop ${this.subJobName}`);
     }
   }
 
