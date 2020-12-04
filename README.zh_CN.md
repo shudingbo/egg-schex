@@ -67,7 +67,8 @@ exports.schex = {
 		"base":{
 			"cron":"*/5 * * * * *",
 			"fun":"./sc/testSC.js",
-			"switch":true				
+      "switch":true,
+      "tz": 'UTC',
 		},
 		"cfg":{
 			"rUrl":"http://test.com"
@@ -96,7 +97,8 @@ key,任务名字；value，任务基本信息
 {
   "cron": "*/60 * * * * *",
   "fun": "./sc/autoadjust.js",
-  "switch": false
+  "switch": false,
+  "tz":'UTC'
 }
 ```
 * cron, cron 字符串
@@ -264,6 +266,7 @@ addJob( 'testAddJob',
     {
       cron: '*/5 * * * * *',
       fun: './sc/testAddJob.js',
+      tz: 'UTC',
       switch: false,
     },
     {
@@ -278,6 +281,7 @@ updateJob('testAddJob',
   {
     cron: '*/5 * * * * *',
     fun: './sc/testAddJob.js',
+    tz: 'UTC',
     switch: true,
   },
   {
@@ -307,6 +311,10 @@ this.app.schex.('jobName');
 
 ## 更改记录
 
+### 0.1.3
+
+1. 增加时区支持. Job 配置 增加 `tz` 选项( [timezone string](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) ), 缺省使用本地时区。
+
 ### 0.0.9
  1. 增加一系列接口函数， 其它 egg Service / controller 可以通过接口函数创建，管理job
  ```
@@ -316,6 +324,7 @@ this.app.schex.('jobName');
           {
             cron: '*/5 * * * * *',
             fun: './sc/testAddJob.js',
+            tz: 'UTC',
             switch: false,
           },
           {
@@ -329,6 +338,7 @@ this.app.schex.('jobName');
           {
             cron: '*/5 * * * * *',
             fun: './sc/testAddJob.js',
+            tz: 'UTC',
             switch: true,
           },
           {

@@ -67,7 +67,8 @@ exports.schex = {
 		"base":{
 			"cron":"*/5 * * * * *",
 			"fun":"./sc/testSC.js",
-			"switch":true				
+      "switch":true,
+      "tz": 'UTC',
 		},
 		"cfg":{
 			"rUrl":"http://test.com"
@@ -96,7 +97,8 @@ key,任务名字；value，任务基本信息
 {
   "cron": "*/60 * * * * *",
   "fun": "./sc/autoadjust.js",
-  "switch": false
+  "switch": false,
+  "tz": 'UTC',
 }
 ```
 * cron, cron 字符串
@@ -265,6 +267,7 @@ addJob( 'testAddJob',
       cron: '*/5 * * * * *',
       fun: './sc/testAddJob.js',
       switch: false,
+      tz: 'UTC',
     },
     {
       path: 'this is path from cfg',
@@ -278,6 +281,7 @@ updateJob('testAddJob',
   {
     cron: '*/5 * * * * *',
     fun: './sc/testAddJob.js',
+    tz: 'GMT',
     switch: true,
   },
   {
@@ -306,6 +310,8 @@ this.app.schex.('jobName');
 
 
 ## 更改记录
+### 0.1.3
+ 1. Add Timezone support. Job cfg add `tz` option( [timezone string](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) ), default use locale timezone.
 
 ### 0.1.0
  1. Fix Delete Job, schex Agent not delete(only redis delete)
