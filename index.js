@@ -1,7 +1,13 @@
 'use strict';
 
+const Job = require('./lib/job_base');
+const Msg = require('./lib/msg_base');
 /**
  * Start egg application with single process mode
  * @since 1.0.0
  */
-exports.SchexJob = require('./lib/job_base');
+module.exports = {
+  SchexJob: Job,
+  SCMsg: Msg,
+};
+

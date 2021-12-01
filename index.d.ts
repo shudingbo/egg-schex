@@ -80,8 +80,8 @@ export type CtlMsg = {
 
 export class SchexManagerApp {
   /** Egg Application */
-  app: Application
-  logger: EggLogger
+  app: Application;
+  logger: EggLogger;
 
 
   /** 是否有正在处理的控制消息 */
@@ -172,5 +172,14 @@ declare module 'egg' {
 
   interface EggAppConfig {
     schex: EggSchexOptions;
+  }
+}
+
+declare module "egg-schex" {
+  abstract class SCMsg<T = object> {
+    ctx: Context;
+    app: Application;
+
+    abstract run(data: T, channel): Promise<any>;
   }
 }
